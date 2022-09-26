@@ -4,6 +4,8 @@ import useMap from '@terrestris/react-geo/dist/Hook/useMap';
 import MapComponent, {
   MapComponentProps
 } from '@terrestris/react-geo/dist/Map/MapComponent/MapComponent';
+import './index.less';
+
 
 export const BasicMapComponent: React.FC<Partial<MapComponentProps>> = (props): JSX.Element => {
   const map = useMap();
@@ -13,10 +15,10 @@ export const BasicMapComponent: React.FC<Partial<MapComponentProps>> = (props): 
   }
 
   return (
-    <MapComponent
+      <MapComponent
       map={map}
       {...props}
-    />
+      />
   );
 };
 

@@ -1,21 +1,21 @@
 import React from 'react';
-
 import BasicMapComponent from './components/BasicMapComponent';
-import BasicNominatimSearch from './components/BasicNominatimSearch';
 import SideDrawer from './components/SideDrawer';
-import ToggleDrawerButton from './components/ToggleDrawerButton';
-
 import './App.less';
+import Header from './components/Header';
+import Player from './components/VideoPlayer';
+import StartButton from './components/StartButton';
+
 
 export const App: React.FC = (): JSX.Element => {
   return (
-    <div className="App">
-      <BasicMapComponent />
-      <BasicNominatimSearch />
-      <ToggleDrawerButton />
-      <SideDrawer />
-      <button />
-    </div>
+      <div className = "App">
+        <Header />
+        <Player />
+        <BasicMapComponent />
+        <StartButton />
+        <SideDrawer />
+      </div>
   );
 };
 

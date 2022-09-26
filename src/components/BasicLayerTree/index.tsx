@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './index.less';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerVector from 'ol/layer/Vector';
 

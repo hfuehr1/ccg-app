@@ -8,6 +8,12 @@ import {
 import ConfigProvider from 'antd/lib/config-provider';
 import deDE from 'antd/lib/locale/de_DE';
 import enGB from 'antd/lib/locale/en_GB';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
+import myGeoJSON from './data/countries.json';
+
+console.log(myGeoJSON)
 
 import {
   defaults as OlControlDefaults
@@ -139,19 +145,46 @@ const setupDefaultMap = () => {
   });
   temperatureNightLayer.set('name', 'Average Land Surface Temperature (Night)');
 
+  const droughtMonitorWMS = new OlLayerTile({
+    opacity: 0.5,
+    visible: true,
+    source: new OlSourceTileWMS({
+      url: 'https://ows.terrestris.de/osm/service?',
+      params: {
+        LAYERS: 'OSM-Overlay-WMS'
+      }
+    })
+  });
+  droughtMonitorWMS.set('name', 'Drought Monitor WMS');
+  
+
+
+  const vectorSource = new VectorSource({
+    features: new GeoJSON().readFeatures(myGeoJSON, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    })
+  });
+
+  const vectorLayer = new VectorLayer({
+    source: vectorSource
+  });
+
+  const extent = vectorSource.getExtent()
+
   const eoLayerGroup = new OlLayerGroup({
-    layers: [temperatureDayLayer, temperatureNightLayer]
+    layers: [temperatureDayLayer, temperatureNightLayer, vectorLayer]
   });
   eoLayerGroup.set('name', 'NASA Earth Observations');
 
   const backgroundLayerGroup = new OlLayerGroup({
-    layers: [osmLayer]
+    layers: [osmLayer, droughtMonitorWMS]
   });
   backgroundLayerGroup.set('name', 'Background');
 
   const center = fromLonLat([0, 40], 'EPSG:3857');
 
-  return new OlMap({
+  const map = new OlMap({
     view: new OlView({
       center: center,
       zoom: 0
@@ -161,6 +194,8 @@ const setupDefaultMap = () => {
       zoom: false
     })
   });
+  map.getView().fit(extent)
+  return map
 };
 
 const renderApp = async () => {
